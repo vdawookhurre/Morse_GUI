@@ -1,0 +1,75 @@
+from tkinter import *
+import gpiozero
+from gpiozero import LED
+import time
+
+
+
+led = LED(4)
+
+MorseCode = { 'A':'.-', 'B':'-...',
+                    'C':'-.-.', 'D':'-..', 'E':'.',
+                    'F':'..-.', 'G':'--.', 'H':'....',
+                    'I':'..', 'J':'.---', 'K':'-.-',
+                    'L':'.-..', 'M':'--', 'N':'-.',
+                    'O':'---', 'P':'.--.', 'Q':'--.-',
+                    'R':'.-.', 'S':'...', 'T':'-',
+                    'U':'..-', 'V':'...-', 'W':'.--',
+                    'X':'-..-', 'Y':'-.--', 'Z':'--..',
+                    '1':'.----', '2':'..---', '3':'...--',
+                    '4':'....-', '5':'.....', '6':'-....',
+                    '7':'--...', '8':'---..', '9':'----.',
+                    '0':'-----', ', ':'--..--', '.':'.-.-.-',
+                    '?':'..--..', '/':'-..-.', '-':'-....-',
+                    '(':'-.--.', ')':'-.--.-'}
+
+win = Tk()
+win.title("Morse Code")
+
+label = Label(win, text = "Write here:")
+label.grid(row = 0, column= 0)
+  
+text = Entry(win, width = 12);
+text.grid(row = 1,column = 0)
+      
+
+def dot():
+    led.on()
+    time.sleep(0.3)
+    led.off()
+    time.sleep(0.3)
+    
+def dash():
+    led.on()
+    time.sleep(1)
+    led.off()
+    time.sleep(1)
+    
+
+    
+def convert():
+        Value= text.get()
+        Value = Value.upper()
+        L = len(Value);
+        
+        if(L <= 12):
+            for i in range(L):
+                for char in MorseCode[Value[i]]:
+                    if(char == '-'):
+                        dash()
+                    elif(char == '.'):
+                        dot()
+        elif(L > 12):
+            Error = Label(text = "No more than 12 characters please.")
+            Error.grid(row=3, column=0)
+
+def close():
+    win.destroy()
+    
+
+Convert = Button( text = "Convert!" , height = 2, width=10, border = 4, command= convert)
+Exit = Button(text = "Exit!", height = 2, width=10, border = 4, command= close )
+Convert.grid(row = 4, column =0)
+Exit.grid(row = 5, column =0)
+win.mainloop()     
+                  
